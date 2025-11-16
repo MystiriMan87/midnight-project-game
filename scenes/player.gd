@@ -23,6 +23,9 @@ var dash_timer = 0.0
 var is_dashing = false
 var can_dash = true
 
+var knockback_velocity = Vector3.ZERO
+
+
 # Mouse
 const MOUSE_SENSITIVITY = 0.003
 
@@ -66,18 +69,26 @@ func _ready():
 	if collision_shape and collision_shape.shape:
 		original_collision_height = collision_shape.shape.height
 	
+	# Wait a frame for everything to be ready
+	await get_tree().process_frame
+	
 	# Get weapon reference
 	if weapon_holder.get_child_count() > 0:
 		current_weapon = weapon_holder.get_child(0)
-		if current_weapon.has_signal("weapon_fired"):
-			current_weapon.weapon_fired.connect(_on_weapon_fired)
+		
+		# Only connect if weapon exists
+		if current_weapon != null:
+			if current_weapon.has_signal("weapon_fired"):
+				current_weapon.weapon_fired.connect(_on_weapon_fired)
+			if current_weapon.has_signal("weapon_reloaded"):
+				current_weapon.weapon_reloaded.connect(_on_weapon_reloaded)
 	
 	# Initialize HUD
 	if hud:
 		hud.update_health(health)
 		if current_weapon:
-			hud.update_ammo(current_weapon.current_ammo, current_weapon.max_ammo)
-
+			hud.update_ammo(current_weapon.current_ammo, current_weapon.max_ammo, current_weapon.reserve_ammo)
+			
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_motion = event.relative
@@ -113,6 +124,9 @@ func _physics_process(delta):
 	# Gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta
+		
+	# Decay knockback
+	knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, 5.0 * delta)
 	
 	# Jump
 	if Input.is_action_just_pressed("jump"):
@@ -143,7 +157,7 @@ func _physics_process(delta):
 	
 	# Update HUD
 	if hud and current_weapon:
-		hud.update_ammo(current_weapon.current_ammo, current_weapon.max_ammo)
+		hud.update_ammo(current_weapon.current_ammo, current_weapon.max_ammo, current_weapon.reserve_ammo)
 	
 	# ESC to free mouse
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -155,6 +169,11 @@ func handle_mouse_look():
 		camera.rotate_x(-mouse_motion.y * MOUSE_SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, -deg_to_rad(89), deg_to_rad(89))
 		mouse_motion = Vector2.ZERO
+		
+func apply_knockback(force: Vector3):
+	knockback_velocity = force
+	velocity += knockback_velocity
+	add_camera_shake(0.3) 
 
 func apply_ground_movement(delta):
 	var target_speed = SPRINT_SPEED if Input.is_action_pressed("sprint") else WALK_SPEED
@@ -282,3 +301,7 @@ func take_damage(amount):
 
 func die():
 	print("Player died!")
+
+func _on_weapon_reloaded():
+	print("Weapon reloaded!")
+	add_camera_shake(0.1)

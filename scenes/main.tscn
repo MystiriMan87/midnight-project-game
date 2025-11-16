@@ -92,6 +92,12 @@ mesh = SubResource("BoxMesh_jyhfs")
 [node name="Enemy" parent="." instance=ExtResource("3_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.266219, 2, 0)
 
+[node name="Enemy2" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.389823, 2, 0)
+
+[node name="Enemy3" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.389823, 2, 0)
+
 [node name="Box" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.128333, 0.485173, 0)
 
