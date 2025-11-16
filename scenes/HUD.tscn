@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://3dlonatqax7p"]
+
+[ext_resource type="Script" uid="uid://c060u5et7ih1" path="res://scenes/hud.gd" id="1_qpvh6"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qpvh6")
+
+[node name="HealthLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 60.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 24
+text = "Health: 100	"
+
+[node name="AmmoLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1084.0
+offset_top = -700.0
+offset_right = -931.0
+offset_bottom = -629.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "Ammo: 12/12
+"
+
+[node name="CrosshairContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Crosshair" type="ColorRect" parent="CrosshairContainer"]
+custom_minimum_size = Vector2(4, 4)
+layout_mode = 2

@@ -1,0 +1,82 @@
+[gd_scene load_steps=8 format=3 uid="uid://c3u13ontl33ek"]
+
+[ext_resource type="Script" uid="uid://cyagf1jwsx6sh" path="res://scenes/weapon.gd" id="1_0eiuv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gdekx"]
+albedo_color = Color(0.36282945, 0.36282945, 0.36282945, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kw13m"]
+material = SubResource("StandardMaterial3D_gdekx")
+size = Vector3(0.1, 0.15, 0.3)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0eiuv"]
+direction = Vector3(0, 0, -1)
+spread = 15.0
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.19999999
+color = Color(1, 1, 0, 1)
+
+[sub_resource type="Animation" id="Animation_gmdh3"]
+resource_name = "shoot"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -0.3), Vector3(0, 0, -0.25), Vector3(0, 0, -0.3)]
+}
+
+[sub_resource type="Animation" id="Animation_vq51a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tplpn"]
+_data = {
+&"RESET": SubResource("Animation_vq51a"),
+&"shoot": SubResource("Animation_gmdh3")
+}
+
+[node name="Pistol" type="Node3D"]
+script = ExtResource("1_0eiuv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.3)
+mesh = SubResource("BoxMesh_kw13m")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1, -100)
+
+[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 7
+lifetime = 0.08
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_0eiuv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tplpn")
+}
+
+[node name="CooldownTimer" type="Timer" parent="."]

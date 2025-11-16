@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://chb7xxi07m7hj"]
+
+[ext_resource type="Script" uid="uid://bp40mhmbx5hen" path="res://scenes/bullet_impact.gd" id="1_2nej4"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u7736"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, -5, 0)
+scale_min = 0.02
+scale_max = 0.049999997
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pkkdf"]
+shading_mode = 0
+albedo_color = Color(0.30692267, 0.3069227, 0.3069227, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_k35m5"]
+material = SubResource("StandardMaterial3D_pkkdf")
+
+[node name="BulletImpact" type="GPUParticles3D"]
+emitting = false
+amount = 10
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_u7736")
+draw_pass_1 = SubResource("QuadMesh_k35m5")
+script = ExtResource("1_2nej4")

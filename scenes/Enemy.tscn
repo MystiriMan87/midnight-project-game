@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgi3mveg4rle0"]
+
+[ext_resource type="Material" uid="uid://mxwi42evutp7" path="res://retro_material.tres" id="1_3gvst"]
+[ext_resource type="Script" uid="uid://rqriv40l6srk" path="res://scenes/enemy.gd" id="1_55jtl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_55jtl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mpr68"]
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_55jtl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_55jtl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("1_3gvst")
+mesh = SubResource("CapsuleMesh_mpr68")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
