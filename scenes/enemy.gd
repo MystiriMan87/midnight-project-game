@@ -7,20 +7,21 @@ extends CharacterBody3D
 var health = max_health
 var player = null
 var gravity = 20.0
+var knockback_velocity = Vector3.ZERO
 
 @onready var nav_agent = $NavigationAgent3D
 
 func _ready():
-	# Find player
 	await get_tree().process_frame
 	player = get_tree().get_first_node_in_group("player")
 
 func _physics_process(delta):
-	# Gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	
-	# Chase player if in range
+	knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, 3.0 * delta)
+	velocity += knockback_velocity * delta * 10.0
+	
 	if player:
 		var distance = global_position.distance_to(player.global_position)
 		
@@ -37,7 +38,6 @@ func _physics_process(delta):
 				velocity.x = direction.x * move_speed
 				velocity.z = direction.z * move_speed
 				
-				# Look at player
 				look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z))
 	
 	move_and_slide()
@@ -48,6 +48,9 @@ func take_damage(amount):
 	
 	if health <= 0:
 		die()
+
+func apply_knockback(force: Vector3):
+	knockback_velocity = force
 
 func die():
 	queue_free()

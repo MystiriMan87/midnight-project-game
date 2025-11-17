@@ -12,30 +12,34 @@ grow_vertical = 2
 script = ExtResource("1_qpvh6")
 
 [node name="HealthLabel" type="Label" parent="."]
-layout_mode = 1
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 60.0
-offset_bottom = 43.0
-theme_override_font_sizes/font_size = 24
-text = "Health: 100	"
+layout_mode = 0
+offset_left = 21.0
+offset_top = 46.0
+offset_right = 215.0
+offset_bottom = 91.0
+theme_override_colors/font_color = Color(0.99999994, 0.04050345, 0.022352884, 1)
+theme_override_font_sizes/font_size = 32
+text = "HEALTH: 100	"
 
 [node name="AmmoLabel" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1084.0
-offset_top = -700.0
-offset_right = -931.0
-offset_bottom = -629.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 24
-text = "Ammo: 12/12
+layout_mode = 0
+offset_left = 21.0
+offset_top = 130.0
+offset_right = 295.0
+offset_bottom = 223.0
+theme_override_font_sizes/font_size = 32
+text = "AMMO: 18/18 [90]
 "
+horizontal_alignment = 2
+
+[node name="ReloadLabel" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 638.0
+offset_top = 294.0
+offset_right = 678.0
+offset_bottom = 333.0
+theme_override_font_sizes/font_size = 28
 
 [node name="CrosshairContainer" type="CenterContainer" parent="."]
 layout_mode = 1
