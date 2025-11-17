@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://c7gdku0ssixu7"]
+[gd_scene load_steps=21 format=3 uid="uid://c7gdku0ssixu7"]
 
 [ext_resource type="PackedScene" uid="uid://braeft345q80v" path="res://scenes/Player.tscn" id="1_o5qli"]
+[ext_resource type="Texture2D" uid="uid://dmuuvyyj7auru" path="res://kenney_prototype-textures/PNG/Orange/texture_01.png" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bgi3mveg4rle0" path="res://scenes/Enemy.tscn" id="3_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
@@ -15,11 +16,8 @@ sky = SubResource("Sky_sgp6g")
 [sub_resource type="BoxShape3D" id="BoxShape3D_0wfyh"]
 size = Vector3(50, 1, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wfyh"]
-shading_mode = 0
-disable_ambient_light = true
-albedo_color = Color(0.15487596, 0.154876, 0.15487596, 1)
-texture_filter = 0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyhfs"]
+albedo_texture = ExtResource("1_sugp2")
 
 [sub_resource type="BoxMesh" id="BoxMesh_0wfyh"]
 size = Vector3(50, 1, 50)
@@ -72,7 +70,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_0wfyh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-material_override = SubResource("StandardMaterial3D_0wfyh")
+material_override = SubResource("StandardMaterial3D_jyhfs")
 mesh = SubResource("BoxMesh_0wfyh")
 
 [node name="Wall1" type="StaticBody3D" parent="."]
