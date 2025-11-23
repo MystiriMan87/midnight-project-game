@@ -1,8 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://c7gdku0ssixu7"]
+[gd_scene load_steps=24 format=3 uid="uid://c7gdku0ssixu7"]
 
 [ext_resource type="PackedScene" uid="uid://braeft345q80v" path="res://scenes/Player.tscn" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://dmuuvyyj7auru" path="res://kenney_prototype-textures/PNG/Orange/texture_01.png" id="1_sugp2"]
+[ext_resource type="Texture2D" uid="uid://b0ld0wg8skhyh" path="res://kenney_prototype-textures/PNG/Green/texture_01.png" id="2_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://bgi3mveg4rle0" path="res://scenes/Enemy.tscn" id="3_sugp2"]
+[ext_resource type="Texture2D" uid="uid://cg4yof6en6qsk" path="res://kenney_prototype-textures/PNG/Dark/texture_01.png" id="5_tefeu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
 
@@ -16,8 +18,9 @@ sky = SubResource("Sky_sgp6g")
 [sub_resource type="BoxShape3D" id="BoxShape3D_0wfyh"]
 size = Vector3(50, 1, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyhfs"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6xl0"]
 albedo_texture = ExtResource("1_sugp2")
+uv1_scale = Vector3(15, 15, 15)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0wfyh"]
 size = Vector3(50, 1, 50)
@@ -27,7 +30,8 @@ size = Vector3(20, 4, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sugp2"]
 shading_mode = 0
-albedo_color = Color(0.21770102, 0.21770105, 0.21770105, 1)
+albedo_texture = ExtResource("2_tbgi4")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tbgi4"]
 size = Vector3(20, 4, 1)
@@ -45,6 +49,10 @@ size = Vector3(50, 1, 50)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tbgi4"]
 size = Vector3(20, 5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tipki"]
+albedo_texture = ExtResource("5_tefeu")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_o6xl0"]
 size = Vector3(20, 5, 1)
@@ -70,26 +78,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_0wfyh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-material_override = SubResource("StandardMaterial3D_jyhfs")
+material_override = SubResource("StandardMaterial3D_o6xl0")
 mesh = SubResource("BoxMesh_0wfyh")
 
 [node name="Wall1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10)
+transform = Transform3D(1.163, 0, 0, 0, 3, 0, 0, 0, 1.163, 0, 5.10533, -10)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall1"]
 shape = SubResource("BoxShape3D_jyhfs")
 
 [node name="MeshInstance3Dd" type="MeshInstance3D" parent="Wall1"]
-material_override = SubResource("StandardMaterial3D_sugp2")
-mesh = SubResource("BoxMesh_tbgi4")
-
-[node name="Wall2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007246971, 5.9562287, -10)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2"]
-shape = SubResource("BoxShape3D_jyhfs")
-
-[node name="MeshInstance3Dd" type="MeshInstance3D" parent="Wall2"]
 material_override = SubResource("StandardMaterial3D_sugp2")
 mesh = SubResource("BoxMesh_tbgi4")
 
@@ -167,15 +165,6 @@ shape = SubResource("BoxShape3D_sugp2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Box6"]
 mesh = SubResource("BoxMesh_tefeu")
 
-[node name="SlideWall" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4142523, 6.724368)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SlideWall"]
-shape = SubResource("BoxShape3D_tbgi4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SlideWall"]
-mesh = SubResource("BoxMesh_o6xl0")
-
 [node name="SlideWall2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7040086, 6.724368)
 
@@ -183,6 +172,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7040086, 6.724368)
 shape = SubResource("BoxShape3D_tbgi4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SlideWall2"]
+material_override = SubResource("StandardMaterial3D_tipki")
 mesh = SubResource("BoxMesh_o6xl0")
 
 [node name="Platform" type="StaticBody3D" parent="."]

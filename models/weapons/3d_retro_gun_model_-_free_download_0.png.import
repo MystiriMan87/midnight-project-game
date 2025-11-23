@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cg4yof6en6qsk"
-path.s3tc="res://.godot/imported/texture_01.png-7167186a176953233689ccdc231bd84a.s3tc.ctex"
+uid="uid://b3jbw11squ82x"
+path.s3tc="res://.godot/imported/3d_retro_gun_model_-_free_download_0.png-de8fb38aba934c8764d3834272e83f77.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "03ef4688d0ab73e84c2ca970ec39f014"
+}
 
 [deps]
 
-source_file="res://kenney_prototype-textures/PNG/Dark/texture_01.png"
-dest_files=["res://.godot/imported/texture_01.png-7167186a176953233689ccdc231bd84a.s3tc.ctex"]
+source_file="res://models/weapons/3d_retro_gun_model_-_free_download_0.png"
+dest_files=["res://.godot/imported/3d_retro_gun_model_-_free_download_0.png-de8fb38aba934c8764d3834272e83f77.s3tc.ctex"]
 
 [params]
 

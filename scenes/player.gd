@@ -4,7 +4,6 @@ const WALK_SPEED = 10.0
 const SPRINT_SPEED = 10.0
 const JUMP_VELOCITY = 8.5
 const GROUND_ACCEL = 50.0
-const GROUND_DECEL = 15.0
 const FRICTION = 6.0
 const AIR_ACCEL = 15.0
 const AIR_STRAFE_ACCEL = 25.0
@@ -18,8 +17,12 @@ const MAX_SLIDE_TIME = 0.6
 
 const DASH_SPEED = 28.0
 const DASH_TIME = 0.15
+const MAX_CONSECUTIVE_DASHES = 3
+const DASH_RESET_TIME = 0.8
 var dash_timer = 0.0
+var dash_reset_timer = 0.0
 var is_dashing = false
+var consecutive_dashes = 0
 
 const MOUSE_SENSITIVITY = 0.003
 const LOOK_UP_LIMIT = -80.0
@@ -109,19 +112,28 @@ func _physics_process(delta):
 	
 	knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, 5.0 * delta)
 	
+	if dash_reset_timer > 0:
+		dash_reset_timer -= delta
+		if dash_reset_timer <= 0:
+			consecutive_dashes = 0
+	
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		if is_sliding:
 			is_sliding = false
 			reset_collision()
 	
-	if Input.is_action_just_pressed("sprint") and not is_on_floor() and not is_dashing:
+	if Input.is_action_just_pressed("sprint") and not is_on_floor() and not is_dashing and consecutive_dashes < MAX_CONSECUTIVE_DASHES:
 		start_dash()
 	
 	if Input.is_action_just_pressed("sprint") and is_on_floor() and not is_sliding:
 		var speed = Vector2(velocity.x, velocity.z).length()
 		if speed > 5.0:
 			start_slide()
+	
+	if is_on_floor():
+		consecutive_dashes = 0
+		dash_reset_timer = 0.0
 	
 	if is_sliding:
 		slide_time += delta
@@ -223,6 +235,8 @@ func update_slide(delta):
 func start_dash():
 	is_dashing = true
 	dash_timer = DASH_TIME
+	consecutive_dashes += 1
+	dash_reset_timer = DASH_RESET_TIME
 	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dash_dir = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -235,6 +249,7 @@ func start_dash():
 	velocity.y = 0
 	
 	add_camera_shake(0.15)
+	print("Dash ", consecutive_dashes, "/", MAX_CONSECUTIVE_DASHES)
 
 func apply_camera_effects(delta):
 	camera_shake_intensity = lerp(camera_shake_intensity, 0.0, camera_shake_decay * delta)
