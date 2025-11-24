@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ciricexnnob1n"]
+[gd_scene load_steps=6 format=3 uid="uid://ciricexnnob1n"]
 
 [ext_resource type="Script" uid="uid://82oaqorm5dqs" path="res://scenes/flying_enemy.gd" id="1_yp6i7"]
 
@@ -10,8 +10,11 @@ material = SubResource("StandardMaterial3D_2t4jl")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4apei"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_vbcm2"]
+
 [node name="FlyingEnemy" type="Node3D"]
 script = ExtResource("1_yp6i7")
+max_health = 25
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ve0v3")
@@ -24,5 +27,8 @@ shape = SubResource("SphereShape3D_4apei")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [node name="ShootTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 1.5
 autostart = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_vbcm2")

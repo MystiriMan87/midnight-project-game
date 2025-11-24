@@ -37,13 +37,6 @@ uv1_scale = Vector3(10, 10, 10)
 [sub_resource type="BoxMesh" id="BoxMesh_tbgi4"]
 size = Vector3(20, 4, 1)
 
-[sub_resource type="NavigationMesh" id="NavigationMesh_0wfyh"]
-vertices = PackedVector3Array(-24.5, 0.49704993, -24.5, -24.5, 0.49704993, 24.5, 24.5, 0.49704993, 24.5, 24.5, 0.49704993, -24.5)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-
-[sub_resource type="BoxMesh" id="BoxMesh_jyhfs"]
-size = Vector3(50, 1, 50)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_sugp2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_tefeu"]
@@ -63,6 +56,20 @@ size = Vector3(5, 1, 5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tipki"]
 size = Vector3(5, 1, 5)
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_tefeu"]
+vertices = PackedVector3Array(-24.5, 1.5, -24.5, -24.5, 1.5, 24.5, 24.5, 1.5, 24.5, 24.5, 1.5, -24.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+geometry_parsed_geometry_type = 0
+cell_size = 0.5
+cell_height = 0.5
+agent_height = 2.0
+agent_max_climb = 0.0
+agent_max_slope = 90.0
+region_min_size = 8.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_85g3d"]
+size = Vector3(50, 1, 50)
 
 [node name="main" type="Node3D"]
 
@@ -94,14 +101,6 @@ mesh = SubResource("BoxMesh_tbgi4")
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_0wfyh")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5029501, 0)
-visible = false
-mesh = SubResource("BoxMesh_jyhfs")
 
 [node name="Enemy" parent="." instance=ExtResource("3_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.266219, 2, 0)
@@ -214,3 +213,15 @@ mesh = SubResource("BoxMesh_tipki")
 
 [node name="FlyingEnemy" parent="." instance=ExtResource("6_tefeu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.295205, 8, 0)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_tefeu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
+visible = false
+mesh = SubResource("BoxMesh_85g3d")
+
+[node name="NavigationVolume" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+visible = false
+size = Vector3(50, 20, 50)
