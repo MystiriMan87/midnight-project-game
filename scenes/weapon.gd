@@ -21,9 +21,15 @@ var is_reloading = false
 
 var sway_amount = 0.02
 var sway_speed = 5.0
+var bob_amount = 0.03
+var bob_speed = 0.15
+var bob_time = 0.0
 
 var can_shoot = true
 var can_secondary_fire = true
+
+var default_position = Vector3.ZERO
+var default_rotation = Vector3.ZERO
 
 @onready var raycast = $RayCast3D
 @onready var muzzle_flash = $MuzzleFlash if has_node("MuzzleFlash") else null
@@ -31,6 +37,7 @@ var can_secondary_fire = true
 @onready var shell_ejection = $ShellEjection if has_node("ShellEjection") else null
 @onready var animation_player = $AnimationPlayer if has_node("AnimationPlayer") else null
 @onready var shoot_point = $ShootPoint if has_node("ShootPoint") else null
+@onready var gun_pivot = $GunPivot if has_node("GunPivot") else null
 
 func _ready():
 	if muzzle_flash:
@@ -42,6 +49,13 @@ func _ready():
 	
 	if not shoot_point:
 		print("WARNING: No ShootPoint found!")
+	
+	if gun_pivot:
+		default_position = gun_pivot.position
+		default_rotation = gun_pivot.rotation
+	else:
+		default_position = position
+		default_rotation = rotation
 
 func _process(delta):
 	apply_weapon_sway(delta)
@@ -62,17 +76,30 @@ func _process(delta):
 		reload()
 
 func apply_weapon_sway(delta):
-	var sway = Vector3.ZERO
-	if Input.is_action_pressed("move_left"):
-		sway.x += sway_amount
-	if Input.is_action_pressed("move_right"):
-		sway.x -= sway_amount
-	if Input.is_action_pressed("move_forward"):
-		sway.y -= sway_amount * 0.5
-	if Input.is_action_pressed("move_back"):
-		sway.y += sway_amount * 0.5
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
 	
-	position = position.lerp(sway, sway_speed * delta)
+	var target_node = gun_pivot if gun_pivot else self
+	
+	var velocity = Vector2(player.velocity.x, player.velocity.z)
+	var speed = velocity.length()
+	
+	if player.is_on_floor() and speed > 1.0:
+		bob_time += delta * speed * bob_speed
+		
+		var sway_x = sin(bob_time) * bob_amount
+		var bob_y = sin(bob_time * 2.0) * bob_amount * 0.5
+		
+		target_node.position.x = lerp(target_node.position.x, default_position.x + sway_x, 10.0 * delta)
+		target_node.position.y = lerp(target_node.position.y, default_position.y + bob_y, 10.0 * delta)
+	else:
+		target_node.position.x = lerp(target_node.position.x, default_position.x, 5.0 * delta)
+		target_node.position.y = lerp(target_node.position.y, default_position.y, 5.0 * delta)
+	
+	var strafe_input = Input.get_axis("move_left", "move_right")
+	var target_tilt = strafe_input * 2.0
+	target_node.rotation_degrees.z = lerp(target_node.rotation_degrees.z, target_tilt, 8.0 * delta)
 
 func shoot():
 	can_shoot = false
@@ -196,6 +223,10 @@ func reload():
 	
 	is_reloading = false
 	weapon_reloaded.emit()
+	
+	if has_node("GunPivot"):
+		var gun_model = get_node("GunPivot")
+		gun_model.rotation.z = 0
 
 func spawn_tracer(from: Vector3, to: Vector3):
 	var tracer = MeshInstance3D.new()

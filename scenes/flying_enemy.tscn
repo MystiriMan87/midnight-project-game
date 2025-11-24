@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ciricexnnob1n"]
+
+[ext_resource type="Script" uid="uid://82oaqorm5dqs" path="res://scenes/flying_enemy.gd" id="1_yp6i7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2t4jl"]
+albedo_color = Color(0.74027425, 0.0006118381, 0.77742434, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ve0v3"]
+material = SubResource("StandardMaterial3D_2t4jl")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4apei"]
+
+[node name="FlyingEnemy" type="Node3D"]
+script = ExtResource("1_yp6i7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ve0v3")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_4apei")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true

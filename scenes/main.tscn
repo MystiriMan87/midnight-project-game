@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://c7gdku0ssixu7"]
+[gd_scene load_steps=25 format=3 uid="uid://c7gdku0ssixu7"]
 
 [ext_resource type="PackedScene" uid="uid://braeft345q80v" path="res://scenes/Player.tscn" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://dmuuvyyj7auru" path="res://kenney_prototype-textures/PNG/Orange/texture_01.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://b0ld0wg8skhyh" path="res://kenney_prototype-textures/PNG/Green/texture_01.png" id="2_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://bgi3mveg4rle0" path="res://scenes/Enemy.tscn" id="3_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cg4yof6en6qsk" path="res://kenney_prototype-textures/PNG/Dark/texture_01.png" id="5_tefeu"]
+[ext_resource type="PackedScene" uid="uid://ciricexnnob1n" path="res://scenes/flying_enemy.tscn" id="6_tefeu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
 
@@ -37,7 +38,7 @@ uv1_scale = Vector3(10, 10, 10)
 size = Vector3(20, 4, 1)
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0wfyh"]
-vertices = PackedVector3Array(-24.5, 1, -24.5, -24.5, 1, 24.5, 24.5, 1, 24.5, 24.5, 1, -24.5)
+vertices = PackedVector3Array(-24.5, 0.49704993, -24.5, -24.5, 0.49704993, 24.5, 24.5, 0.49704993, 24.5, 24.5, 0.49704993, -24.5)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="BoxMesh" id="BoxMesh_jyhfs"]
@@ -210,3 +211,6 @@ shape = SubResource("BoxShape3D_tefeu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platform4"]
 mesh = SubResource("BoxMesh_tipki")
+
+[node name="FlyingEnemy" parent="." instance=ExtResource("6_tefeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.295205, 8, 0)
