@@ -13,7 +13,6 @@ var health = max_health
 var player = null
 var hover_time = 0.0
 var gravity = 5.0
-
 var projectile_scene = preload("res://scenes/enemy_projectile.tscn")
 
 @onready var shoot_timer = $ShootTimer
@@ -105,36 +104,100 @@ func apply_knockback(force: Vector3):
 	velocity += force * 0.3
 
 func die():
-	spawn_death_effect()
+	# Hide enemy and stop all processing
+	visible = false
+	set_physics_process(false)
+	set_process(false)
+	
+	# Stop shooting
+	if shoot_timer:
+		shoot_timer.stop()
+	
+	# Spawn effects and wait for completion
+	await spawn_death_effect()
+	
+	# Now safe to delete
 	queue_free()
 
 func spawn_death_effect():
 	var particles = GPUParticles3D.new()
 	particles.emitting = true
 	particles.one_shot = true
-	particles.amount = 30
-	particles.lifetime = 0.6
+	particles.amount = 40
+	particles.lifetime = 0.8
 	particles.explosiveness = 1.0
 	
 	var material = ParticleProcessMaterial.new()
 	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
 	material.emission_sphere_radius = 0.5
-	material.direction = Vector3(0, 1, 0)
+	material.direction = Vector3(0, 0, 0)
 	material.spread = 180
-	material.initial_velocity_min = 5.0
-	material.initial_velocity_max = 10.0
+	material.initial_velocity_min = 6.0
+	material.initial_velocity_max = 12.0
 	material.gravity = Vector3(0, -15, 0)
-	material.scale_min = 0.1
-	material.scale_max = 0.2
-	material.color = Color.RED
+	material.damping_min = 1.0
+	material.damping_max = 3.0
+	
+	material.scale_min = 0.12
+	material.scale_max = 0.25
+	
+	# Color gradient for more dynamic effect
+	var gradient = Gradient.new()
+	gradient.add_point(0.0, Color(1, 0.4, 0.8, 1))  # Bright pink
+	gradient.add_point(0.4, Color(0.8, 0.2, 0.6, 1))  # Mid pink
+	gradient.add_point(1.0, Color(0.4, 0.0, 0.3, 0))  # Dark fade
+	var gradient_texture = GradientTexture1D.new()
+	gradient_texture.gradient = gradient
+	material.color_ramp = gradient_texture
+	
+	# Add rotation
+	material.angle_min = 0
+	material.angle_max = 360
 	
 	particles.process_material = material
 	
-	var mesh = QuadMesh.new()
-	particles.draw_pass_1 = mesh
+	# Set up mesh with proper material
+	var quad_mesh = QuadMesh.new()
+	quad_mesh.size = Vector2(0.25, 0.25)
+	
+	var mesh_mat = StandardMaterial3D.new()
+	mesh_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mesh_mat.vertex_color_use_as_albedo = true
+	mesh_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mesh_mat.billboard_mode = StandardMaterial3D.BILLBOARD_PARTICLES
+	mesh_mat.albedo_color = Color.WHITE
+	
+	quad_mesh.material = mesh_mat
+	particles.draw_pass_1 = quad_mesh
 	
 	get_tree().root.add_child(particles)
 	particles.global_position = global_position
 	
-	await get_tree().create_timer(0.8).timeout
+	# Flash effect (smaller for flying enemy)
+	var flash = MeshInstance3D.new()
+	var sphere = SphereMesh.new()
+	sphere.radius = 1.0
+	sphere.height = 2.0
+	flash.mesh = sphere
+	
+	var flash_mat = StandardMaterial3D.new()
+	flash_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	flash_mat.albedo_color = Color(1, 0.3, 0.8, 0.7)
+	flash_mat.emission_enabled = true
+	flash_mat.emission = Color(1, 0.4, 0.9)
+	flash_mat.emission_energy_multiplier = 4.0
+	flash_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	flash.material_override = flash_mat
+	
+	get_tree().root.add_child(flash)
+	flash.global_position = global_position
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(flash, "scale", Vector3.ZERO, 0.25).from(Vector3.ONE * 0.25)
+	tween.tween_property(flash_mat, "albedo_color:a", 0.0, 0.25)
+	
+	# Wait for effects to complete
+	await get_tree().create_timer(1.0).timeout
 	particles.queue_free()
+	flash.queue_free()
