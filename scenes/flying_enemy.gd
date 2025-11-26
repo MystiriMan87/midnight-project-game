@@ -28,7 +28,6 @@ func _ready():
 func _physics_process(delta):
 	hover_time += delta
 	
-	# Very light gravity so it doesn't fall
 	if global_position.y < hover_height:
 		velocity.y = gravity
 	else:
@@ -90,6 +89,11 @@ func shoot_projectile():
 func take_damage(amount):
 	health -= amount
 	
+	var hitmarker = get_tree().get_first_node_in_group("hitmarker")
+	if hitmarker:
+		hitmarker.show_hit(health <= 0)
+	
+	
 	if mesh:
 		mesh.scale = Vector3.ONE * 0.8
 		var tween = create_tween()
@@ -104,19 +108,15 @@ func apply_knockback(force: Vector3):
 	velocity += force * 0.3
 
 func die():
-	# Hide enemy and stop all processing
 	visible = false
 	set_physics_process(false)
 	set_process(false)
 	
-	# Stop shooting
 	if shoot_timer:
 		shoot_timer.stop()
 	
-	# Spawn effects and wait for completion
 	await spawn_death_effect()
 	
-	# Now safe to delete
 	queue_free()
 
 func spawn_death_effect():
@@ -141,22 +141,19 @@ func spawn_death_effect():
 	material.scale_min = 0.12
 	material.scale_max = 0.25
 	
-	# Color gradient for more dynamic effect
 	var gradient = Gradient.new()
-	gradient.add_point(0.0, Color(1, 0.4, 0.8, 1))  # Bright pink
-	gradient.add_point(0.4, Color(0.8, 0.2, 0.6, 1))  # Mid pink
-	gradient.add_point(1.0, Color(0.4, 0.0, 0.3, 0))  # Dark fade
+	gradient.add_point(0.0, Color(1, 0.3, 0.2, 1))  # Bright red-orange
+	gradient.add_point(0.4, Color(0.9, 0.1, 0.1, 1))  # Deep red
+	gradient.add_point(1.0, Color(0.4, 0.0, 0.0, 0))  # Dark fade
 	var gradient_texture = GradientTexture1D.new()
 	gradient_texture.gradient = gradient
 	material.color_ramp = gradient_texture
 	
-	# Add rotation
 	material.angle_min = 0
 	material.angle_max = 360
 	
 	particles.process_material = material
 	
-	# Set up mesh with proper material
 	var quad_mesh = QuadMesh.new()
 	quad_mesh.size = Vector2(0.25, 0.25)
 	
@@ -173,7 +170,6 @@ func spawn_death_effect():
 	get_tree().root.add_child(particles)
 	particles.global_position = global_position
 	
-	# Flash effect (smaller for flying enemy)
 	var flash = MeshInstance3D.new()
 	var sphere = SphereMesh.new()
 	sphere.radius = 1.0
@@ -182,9 +178,9 @@ func spawn_death_effect():
 	
 	var flash_mat = StandardMaterial3D.new()
 	flash_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	flash_mat.albedo_color = Color(1, 0.3, 0.8, 0.7)
+	flash_mat.albedo_color = Color(1, 0.2, 0.2, 0.7)
 	flash_mat.emission_enabled = true
-	flash_mat.emission = Color(1, 0.4, 0.9)
+	flash_mat.emission = Color.RED
 	flash_mat.emission_energy_multiplier = 4.0
 	flash_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	flash.material_override = flash_mat
@@ -197,7 +193,6 @@ func spawn_death_effect():
 	tween.tween_property(flash, "scale", Vector3.ZERO, 0.25).from(Vector3.ONE * 0.25)
 	tween.tween_property(flash_mat, "albedo_color:a", 0.0, 0.25)
 	
-	# Wait for effects to complete
 	await get_tree().create_timer(1.0).timeout
 	particles.queue_free()
 	flash.queue_free()

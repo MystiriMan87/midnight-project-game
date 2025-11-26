@@ -44,6 +44,11 @@ func _physics_process(delta):
 
 func take_damage(amount):
 	health -= amount
+	
+	var hitmarker = get_tree().get_first_node_in_group("hitmarker")
+	if hitmarker:
+		hitmarker.show_hit(health <= 0)
+		
 	print("Enemy took ", amount, " damage. Health: ", health)
 	
 	if health <= 0:
@@ -53,15 +58,12 @@ func apply_knockback(force: Vector3):
 	knockback_velocity = force
 
 func die():
-	# Hide the enemy immediately but don't delete yet
 	visible = false
 	set_physics_process(false)
 	set_process(false)
 	
-	# Spawn effects
 	await spawn_death_explosion()
 	
-	# Now safe to delete
 	queue_free()
 
 func spawn_shockwave(pos: Vector3):
@@ -114,22 +116,19 @@ func spawn_death_explosion():
 	material.scale_min = 0.15
 	material.scale_max = 0.35
 	
-	# Color gradient setup
 	var gradient = Gradient.new()
-	gradient.add_point(0.0, Color.RED)
-	gradient.add_point(0.3, Color(0.8, 0.1, 0.1, 1))
-	gradient.add_point(1.0, Color(0.3, 0.0, 0.0, 0))
+	gradient.add_point(0.0, Color(1, 0.1, 0.0, 1))  # Intense bright red
+	gradient.add_point(0.3, Color(0.9, 0.0, 0.0, 1))  # Pure deep red
+	gradient.add_point(1.0, Color(0.5, 0.0, 0.0, 0))  # Dark red fade
 	var gradient_texture = GradientTexture1D.new()
 	gradient_texture.gradient = gradient
 	material.color_ramp = gradient_texture
 	
-	# Add randomness to make it more dynamic
 	material.angle_min = 0
 	material.angle_max = 360
 	
 	particles.process_material = material
 	
-	# Set up mesh with proper material
 	var mesh = QuadMesh.new()
 	mesh.size = Vector2(0.3, 0.3)
 	
@@ -148,7 +147,6 @@ func spawn_death_explosion():
 	
 	spawn_shockwave(global_position)
 	
-	# Flash effect
 	var flash = MeshInstance3D.new()
 	var sphere = SphereMesh.new()
 	sphere.radius = 1.5
@@ -157,10 +155,10 @@ func spawn_death_explosion():
 	
 	var flash_mat = StandardMaterial3D.new()
 	flash_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	flash_mat.albedo_color = Color(1, 0.2, 0.2, 0.8)
+	flash_mat.albedo_color = Color(1, 0.05, 0.05, 0.9)
 	flash_mat.emission_enabled = true
-	flash_mat.emission = Color.RED
-	flash_mat.emission_energy_multiplier = 5.0
+	flash_mat.emission = Color(1, 0, 0)
+	flash_mat.emission_energy_multiplier = 6.0
 	flash_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	flash.material_override = flash_mat
 	

@@ -27,6 +27,10 @@ window/stretch/scale=0.75
 
 enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
+[global_group]
+
+hitmarker=""
+
 [input]
 
 ui_accept={

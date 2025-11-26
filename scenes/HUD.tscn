@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://3dlonatqax7p"]
+[gd_scene load_steps=3 format=3 uid="uid://3dlonatqax7p"]
 
 [ext_resource type="Script" uid="uid://c060u5et7ih1" path="res://scenes/hud.gd" id="1_qpvh6"]
+[ext_resource type="PackedScene" uid="uid://bpycr6pq2ts0r" path="res://scenes/hitmarker.tscn" id="2_fls4u"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -53,3 +54,6 @@ mouse_filter = 2
 [node name="Crosshair" type="ColorRect" parent="CrosshairContainer"]
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 2
+
+[node name="Hitmarker" parent="." instance=ExtResource("2_fls4u")]
+layout_mode = 1

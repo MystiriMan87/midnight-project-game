@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpycr6pq2ts0r"]
+
+[ext_resource type="Script" uid="uid://bff5elekfuahx" path="res://scenes/hitmarker.gd" id="1_50a4c"]
+
+[node name="Hitmarker" type="Control" groups=["hitmarker"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_50a4c")
+
+[node name="TopLeft" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 3.0
+offset_bottom = 3.0
+
+[node name="TopRight" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 3.0
+offset_bottom = 3.0
+
+[node name="BottomLeft" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 3.0
+offset_bottom = 3.0
+
+[node name="BottomRight" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 3.0
+offset_bottom = 3.0

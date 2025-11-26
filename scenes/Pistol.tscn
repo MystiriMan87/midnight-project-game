@@ -120,12 +120,12 @@ script = ExtResource("1_0eiuv")
 fire_rate = 0.1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.076903105)
 visible = false
 mesh = SubResource("BoxMesh_kw13m")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.5943922)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.37129527)
 target_position = Vector3(0, -1, -100)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -136,7 +136,7 @@ libraries = {
 [node name="CooldownTimer" type="Timer" parent="."]
 
 [node name="ShootPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.5943922)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.37129527)
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="ShootPoint"]
 emitting = false
@@ -149,7 +149,7 @@ process_material = SubResource("ParticleProcessMaterial_0eiuv")
 draw_pass_1 = SubResource("QuadMesh_0eiuv")
 
 [node name="MuzzleFlashRing" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.5943922)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29073986, -0.11742659, -0.37129527)
 emitting = false
 amount = 1
 one_shot = true
@@ -158,7 +158,7 @@ process_material = SubResource("ParticleProcessMaterial_gmdh3")
 draw_pass_1 = SubResource("QuadMesh_vq51a")
 
 [node name="GunPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.9975641, 0.06975647, 0, -0.06975647, 0.9975641, 0.3023574, -0.1651518, -0.26709232)
+transform = Transform3D(1, 0, 0, 0, 0.9975641, 0.06975647, 0, -0.06975647, 0.9975641, 0.3023574, -0.1651518, -0.04399538)
 
 [node name="Sketchfab_Scene" parent="GunPivot" instance=ExtResource("2_gdekx")]
 transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0.059434608, -0.25360993)
