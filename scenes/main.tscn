@@ -229,4 +229,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, 15.872358)
 script = ExtResource("7_o6xl0")
 enemy_scene = ExtResource("3_sugp2")
 flying_enemy_scene = ExtResource("6_tefeu")
-time_between_waves = 5.0

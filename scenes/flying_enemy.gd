@@ -1,4 +1,6 @@
 extends CharacterBody3D
+signal died
+
 
 @export var max_health = 50
 @export var move_speed = 5.0
@@ -108,6 +110,7 @@ func apply_knockback(force: Vector3):
 	velocity += force * 0.3
 
 func die():
+	died.emit() 
 	visible = false
 	set_physics_process(false)
 	set_process(false)
