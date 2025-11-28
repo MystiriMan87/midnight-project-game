@@ -1,0 +1,116 @@
+extends Node3D
+
+@export var enemy_scene: PackedScene
+@export var flying_enemy_scene: PackedScene
+@export var ground_enemies_per_wave = 3 
+@export var flying_enemies_per_wave = 2
+@export var time_between_waves = 20.0
+@export var spawn_radius = 10.0
+@export var increase_difficulty = true
+
+var current_wave = 0
+var enemies_alive = 0
+var wave_active = false
+
+func _ready():
+	start_wave()
+	
+func start_wave():
+	current_wave += 1
+	wave_active = true
+	enemies_alive = 0 
+	
+	var ground_count = ground_enemies_per_wave
+	var flying_count = flying_enemies_per_wave
+	
+	if increase_difficulty:
+		ground_count += (current_wave - 1)
+		flying_count += (current_wave - 1) / 2
+		
+	for i in ground_count:
+		if enemy_scene:
+			spawn_enemy(enemy_scene, false)
+			await get_tree().create_timer(0.5).timeout
+			
+	for i in flying_count:
+		if flying_enemy_scene:
+			spawn_enemy(flying_enemy_scene, true)
+			await get_tree().create_timer(0.5).timeout
+			
+func spawn_enemy(scene: PackedScene, is_flying: bool):
+	if not scene:
+		return
+	
+	var enemy = scene.instantiate()
+	get_tree().root.add_child(enemy)
+	
+	var random_offset = Vector3(
+		randf_range(-spawn_radius, spawn_radius), 
+		0, 
+		randf_range(-spawn_radius, spawn_radius)
+	) 
+	
+	var spawn_pos = global_position + random_offset
+	
+	
+	if is_flying:
+		spawn_pos.y += 5.0
+		
+	enemy.global_position = spawn_pos
+	
+	enemies_alive += 1 
+	
+	spawn_effect(spawn_pos)
+	
+	if enemy.has_signal("died"):
+		enemy.died.connect(_on_enemy_died)
+	else:
+		check_enemy_alive(enemy)
+		
+func check_enemy_alive(enemy):
+	while enemy and is_instance_valid(enemy):
+		await get_tree().create_timer(0.5).timeout
+		
+	if not is_instance_valid(enemy):
+		_on_enemy_died()
+
+func _on_enemy_died():
+	enemies_alive -= 1
+	
+	print("Enemies remaining: ", enemies_alive)
+	
+	if enemies_alive <= 0 and wave_active:
+		wave_active = false
+		await get_tree().create_timer(time_between_waves).timeout
+		start_wave()
+		
+func spawn_effect(pos: Vector3):
+	var particles = GPUParticles3D.new()
+	particles.emitting = true
+	particles.one_shot = true
+	particles.amount = 30
+	particles.lifetime = 0.5
+	particles.explosiveness = 1.0
+	
+	var material = ParticleProcessMaterial.new()
+	material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	material.emission_sphere_radius = 1.0
+	material.direction = Vector3(0, 1, 0)
+	material.spread = 45
+	material.initial_velocity_min = 3.0
+	material.initial_velocity_max = 6.0
+	material.gravity = Vector3(0, -5, 0)
+	material.scale_min = 0.1
+	material.scale_max = 0.2
+	material.color = Color.CYAN
+	
+	particles.process_material = material
+	
+	var mesh = QuadMesh.new()
+	particles.draw_pass_1 = mesh
+	
+	get_tree().root.add_child(particles)
+	particles.global_position = pos
+	
+	await get_tree().create_timer(0.6).timeout
+	particles.queue_free()	

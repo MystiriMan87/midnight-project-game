@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c7gdku0ssixu7"]
+[gd_scene load_steps=26 format=3 uid="uid://c7gdku0ssixu7"]
 
 [ext_resource type="PackedScene" uid="uid://braeft345q80v" path="res://scenes/Player.tscn" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://dmuuvyyj7auru" path="res://kenney_prototype-textures/PNG/Orange/texture_01.png" id="1_sugp2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bgi3mveg4rle0" path="res://scenes/Enemy.tscn" id="3_sugp2"]
 [ext_resource type="Texture2D" uid="uid://cg4yof6en6qsk" path="res://kenney_prototype-textures/PNG/Dark/texture_01.png" id="5_tefeu"]
 [ext_resource type="PackedScene" uid="uid://ciricexnnob1n" path="res://scenes/flying_enemy.tscn" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bhqxxl3sefhfg" path="res://wave_spawner.gd" id="7_o6xl0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
 
@@ -222,3 +223,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.295205, 8, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 visible = false
 size = Vector3(50, 20, 50)
+
+[node name="WaveSpawner" type="Node3D" parent="." groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, 15.872358)
+script = ExtResource("7_o6xl0")
+enemy_scene = ExtResource("3_sugp2")
+flying_enemy_scene = ExtResource("6_tefeu")
+time_between_waves = 5.0
