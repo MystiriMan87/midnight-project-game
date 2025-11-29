@@ -24,10 +24,10 @@ text = "HEALTH: 100	"
 
 [node name="AmmoLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 21.0
-offset_top = 130.0
-offset_right = 295.0
-offset_bottom = 223.0
+offset_left = 963.0
+offset_top = 46.0
+offset_right = 1237.0
+offset_bottom = 139.0
 theme_override_font_sizes/font_size = 32
 text = "AMMO: 18/18 [90]
 "
@@ -44,9 +44,15 @@ theme_override_font_sizes/font_size = 28
 
 [node name="CrosshairContainer" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -57,3 +63,13 @@ layout_mode = 2
 
 [node name="Hitmarker" parent="." instance=ExtResource("2_fls4u")]
 layout_mode = 1
+
+[node name="WaveLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 581.0
+offset_top = 46.0
+offset_right = 711.0
+offset_bottom = 96.0
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 36
+text = "WAVE 1"
