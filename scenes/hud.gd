@@ -6,6 +6,8 @@ extends Control
 @onready var wave_label: Label = $WaveLabel if has_node("WaveLabel") else null
 
 func _ready():
+	add_to_group("hud")
+	
 	if reload_label:
 		reload_label.visible = get_theme_default_base_scale()
 
@@ -83,3 +85,14 @@ func show_wave_complete():
 		await get_tree().create_timer(2.0).timeout
 		wave_label.add_theme_color_override("font_color", Color.WHITE)
 		
+func show_wave_incoming(wave_number: int, time_until: float):
+	if wave_label:
+		wave_label.text = "WAVE " + str(wave_number) + " INCOMING"
+		wave_label.add_theme_color_override("font_color", Color.ORANGE)
+		
+		while time_until > 0:
+			wave_label.text = "WAVE " + str(wave_number) + " IN " + str(ceil(time_until))
+			await get_tree().create_timer(1.0).timeout
+			time_until -= 1.0
+		
+		wave_label.add_theme_color_override("font_color", Color.WHITE)

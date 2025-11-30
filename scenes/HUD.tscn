@@ -73,3 +73,4 @@ offset_bottom = 96.0
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 36
 text = "WAVE 1"
+horizontal_alignment = 1
