@@ -110,6 +110,7 @@ func shoot():
 	if animation_player and animation_player.has_animation("shoot"):
 		animation_player.play("shoot", -1, 1.5)
 	
+	
 	if muzzle_flash:
 		muzzle_flash.restart()
 		muzzle_flash.emitting = true
@@ -135,6 +136,10 @@ func shoot():
 		spawn_impact_effect(hit_point)
 	
 	spawn_tracer(shoot_origin, hit_point)
+	
+	var adjusted_fire_rate = fire_rate * Engine.time_scale
+	await get_tree().create_timer(adjusted_fire_rate, false).timeout
+	can_shoot = true
 	
 	await get_tree().create_timer(fire_rate, false).timeout
 	can_shoot = true
@@ -174,6 +179,10 @@ func shoot_explosive():
 	spawn_explosive_tracer(shoot_origin, explosion_point)
 	
 	await get_tree().create_timer(secondary_fire_rate, false).timeout
+	can_secondary_fire = true
+	
+	var adjusted_cooldown = secondary_fire_rate * Engine.time_scale
+	await get_tree().create_timer(adjusted_cooldown, false).timeout
 	can_secondary_fire = true
 
 func create_explosion(pos: Vector3):
@@ -227,6 +236,9 @@ func reload():
 	if has_node("GunPivot"):
 		var gun_model = get_node("GunPivot")
 		gun_model.rotation.z = 0
+		
+	var adjusted_reload = reload_time * Engine.time_scale
+	await get_tree().create_timer(adjusted_reload, false).timeout
 
 func spawn_tracer(from: Vector3, to: Vector3):
 	var tracer = MeshInstance3D.new()
