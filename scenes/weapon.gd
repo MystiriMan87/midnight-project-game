@@ -178,11 +178,8 @@ func shoot_explosive():
 	
 	spawn_explosive_tracer(shoot_origin, explosion_point)
 	
-	await get_tree().create_timer(secondary_fire_rate, false).timeout
-	can_secondary_fire = true
 	
-	var adjusted_cooldown = secondary_fire_rate * Engine.time_scale
-	await get_tree().create_timer(adjusted_cooldown, false).timeout
+	await get_tree().create_timer(secondary_fire_rate, false).timeout
 	can_secondary_fire = true
 
 func create_explosion(pos: Vector3):

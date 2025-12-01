@@ -117,7 +117,8 @@ lightmap_size_hint = Vector2i(7, 7)
 
 [node name="Pistol" type="Node3D"]
 script = ExtResource("1_0eiuv")
-fire_rate = 0.1
+fire_rate = 0.3
+reserve_ammo = 360
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.076903105)

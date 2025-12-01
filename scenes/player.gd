@@ -46,7 +46,8 @@ var can_use_time_slow = true
 @export var max_health = 100
 var health = max_health
 
-var gravity = 25.0
+const NORMAL_GRAVITY = 25.0
+var gravity = NORMAL_GRAVITY
 var wish_dir = Vector3.ZERO
 
 var camera_shake_intensity = 0.0
@@ -133,21 +134,22 @@ func _physics_process(delta):
 	
 	handle_time_slow(delta)
 	
-	var real_delta = delta / Engine.time_scale
-	
+	# Apply gravity ALWAYS at normal rate
 	if not is_on_floor():
-		velocity.y -= gravity * real_delta
+		velocity.y -= NORMAL_GRAVITY * delta
 	
-	knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, 5.0 * real_delta)
+	# Knockback at normal rate
+	knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, 5.0 * delta)
 	
 	if dash_reset_timer > 0:
-		dash_reset_timer -= real_delta
+		dash_reset_timer -= delta
 		if dash_reset_timer <= 0:
 			consecutive_dashes = 0
 	
 	if dash_cooldown_timer > 0:
-		dash_cooldown_timer -= real_delta
+		dash_cooldown_timer -= delta
 	
+	# Jump at full strength regardless of time scale
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		
@@ -179,16 +181,16 @@ func _physics_process(delta):
 	wish_dir = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if is_sliding:
-		slide_time += real_delta
+		slide_time += delta
 		if slide_time > MAX_SLIDE_TIME or not Input.is_action_pressed("sprint"):
 			end_slide()
-		update_slide(real_delta)
+		update_slide(delta)
 	elif is_dashing:
-		dash_timer -= real_delta
+		dash_timer -= delta
 		if dash_timer <= 0:
 			end_dash()
 	else:
-		handle_movement(real_delta)
+		handle_movement(delta)
 	
 	move_and_slide()
 	update_hud()
@@ -359,9 +361,7 @@ func apply_time_slow_effect():
 	hud.add_child(overlay)
 
 func apply_camera_effects(delta):
-	var real_delta = delta / Engine.time_scale
-	
-	camera_shake_intensity = lerp(camera_shake_intensity, 0.0, camera_shake_decay * real_delta)
+	camera_shake_intensity = lerp(camera_shake_intensity, 0.0, camera_shake_decay * delta)
 	
 	if camera_shake_intensity > 0.01:
 		var shake_offset = Vector3(
@@ -376,7 +376,7 @@ func apply_camera_effects(delta):
 	
 	var strafe_input = Input.get_axis("move_left", "move_right")
 	var target_tilt = -strafe_input * MAX_TILT
-	camera_tilt = lerp(camera_tilt, target_tilt, TILT_SPEED * real_delta)
+	camera_tilt = lerp(camera_tilt, target_tilt, TILT_SPEED * delta)
 	
 	camera.rotation.x = camera_pitch
 	camera.rotation.y = 0
@@ -385,12 +385,13 @@ func apply_camera_effects(delta):
 	var horizontal_speed = Vector2(velocity.x, velocity.z).length()
 	target_fov = BASE_FOV + (horizontal_speed * SPEED_FOV_MULTIPLIER)
 	target_fov = clamp(target_fov, BASE_FOV, BASE_FOV + 15)
-	camera.fov = lerp(camera.fov, target_fov, 5.0 * real_delta)
+	camera.fov = lerp(camera.fov, target_fov, 5.0 * delta)
 
 func add_camera_shake(intensity: float):
 	camera_shake_intensity += intensity
 
 func apply_knockback(force: Vector3):
+	# Knockback is NOT affected by time scale
 	knockback_velocity = force
 	velocity += knockback_velocity
 	add_camera_shake(0.3)
