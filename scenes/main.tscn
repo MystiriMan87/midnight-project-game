@@ -225,7 +225,7 @@ visible = false
 size = Vector3(50, 20, 50)
 
 [node name="WaveSpawner" type="Node3D" parent="." groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, 15.872358)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, -1.4476948)
 script = ExtResource("7_o6xl0")
 enemy_scene = ExtResource("3_sugp2")
 flying_enemy_scene = ExtResource("6_tefeu")
