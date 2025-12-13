@@ -107,6 +107,21 @@ mesh = SubResource("BoxMesh_tbgi4")
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
+[node name="FlyingEnemy" parent="." instance=ExtResource("6_tefeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.295205, 8, 0)
+
+[node name="NavigationVolume" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+visible = false
+size = Vector3(50, 20, 50)
+
+[node name="WaveSpawner" type="Node3D" parent="." groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, -1.4476948)
+script = ExtResource("7_o6xl0")
+enemy_scene = ExtResource("3_sugp2")
+flying_enemy_scene = ExtResource("6_tefeu")
+time_between_waves = 10.0
+
 [node name="Enemy" parent="." instance=ExtResource("3_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.266219, 2, 0)
 
@@ -215,18 +230,3 @@ shape = SubResource("BoxShape3D_tefeu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platform4"]
 mesh = SubResource("BoxMesh_tipki")
-
-[node name="FlyingEnemy" parent="." instance=ExtResource("6_tefeu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.295205, 8, 0)
-
-[node name="NavigationVolume" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-visible = false
-size = Vector3(50, 20, 50)
-
-[node name="WaveSpawner" type="Node3D" parent="." groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7357903, -1.4476948)
-script = ExtResource("7_o6xl0")
-enemy_scene = ExtResource("3_sugp2")
-flying_enemy_scene = ExtResource("6_tefeu")
-time_between_waves = 10.0
