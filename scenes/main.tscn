@@ -16,6 +16,8 @@ sky_material = SubResource("ProceduralSkyMaterial_o5qli")
 [sub_resource type="Environment" id="Environment_o5qli"]
 background_mode = 2
 sky = SubResource("Sky_sgp6g")
+glow_enabled = true
+adjustment_enabled = true
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_tefeu"]
 vertices = PackedVector3Array(-24.5, 1, -24.5, -24.5, 1, 24.5, 24.5, 1, 24.5, 24.5, 1, -24.5)

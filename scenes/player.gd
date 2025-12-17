@@ -297,6 +297,9 @@ func start_dash():
 	velocity.y = 0
 	
 	add_camera_shake(0.2)
+	
+	# Trigger dash screen effect
+	ScreenFxManager.show_dash_effect(DASH_TIME + 0.1)
 
 func end_dash():
 	is_dashing = false
@@ -329,6 +332,9 @@ func activate_time_slow():
 	apply_time_slow_effect()
 	add_camera_shake(0.15)
 	
+	# Trigger time slow screen effect
+	ScreenFxManager.show_time_slow_effect(true)
+	
 	print("TIME SLOW ACTIVATED!")
 
 func deactivate_time_slow():
@@ -341,6 +347,9 @@ func deactivate_time_slow():
 		hud.get_node("TimeSlowOverlay").queue_free()
 	
 	add_camera_shake(0.1)
+	
+	# Turn off time slow screen effect
+	ScreenFxManager.show_time_slow_effect(false)
 	
 	print("Time slow ended. Cooldown: ", TIME_SLOW_COOLDOWN, "s")
 
@@ -422,6 +431,12 @@ func take_damage(amount):
 			hud.flash_low_health()
 	
 	add_camera_shake(0.25)
+	
+	# Only show vignette when actually taking damage (not continuously)
+	if amount > 0:
+		var damage_intensity = clamp(amount / 50.0, 0.2, 1.0)
+		ScreenFxManager.show_vignette(damage_intensity)
+	
 	update_hud()
 	
 	if health <= 0:
